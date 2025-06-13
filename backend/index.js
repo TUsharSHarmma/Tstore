@@ -6,14 +6,21 @@ require('dotenv').config();
 
 const app = express();
 
-// Middlewares
-app.use(cors());
+// ✅ Proper CORS setup for frontend-backend communication
+const corsOptions = {
+  origin: 'https://tstore-1.onrender.com', // 👈 your frontend domain on Render
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true, // only if you're using cookies or auth headers
+};
+app.use(cors(corsOptions));
+
+// Middleware
 app.use(express.json());
 
 // Serve static files (APK files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB Connection
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true

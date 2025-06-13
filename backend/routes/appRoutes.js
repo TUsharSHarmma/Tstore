@@ -24,12 +24,13 @@ router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), asy
     const apkFile = req.files['apk']?.[0];
     const bannerFile = req.files['banner']?.[0];
 
-    if (!apkFile || !bannerFile) {
-      return res.status(400).json({ message: 'Both APK and banner are required' });
+    if (!title || !description || !apkFile || !bannerFile) {
+      return res.status(400).json({ message: 'Title, description, APK, and banner are required' });
     }
 
-    const apkUrl = `http://localhost:5000/uploads/${apkFile.filename}`;
-    const bannerUrl = `http://localhost:5000/uploads/${bannerFile.filename}`;
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const apkUrl = `${baseUrl}/uploads/${apkFile.filename}`;
+    const bannerUrl = `${baseUrl}/uploads/${bannerFile.filename}`;
 
     const newApp = new App({ title, description, apkUrl, bannerUrl });
     await newApp.save();
@@ -40,6 +41,7 @@ router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), asy
     res.status(500).json({ message: 'Server error while uploading app' });
   }
 });
+
 
 // GET /api/apps
 router.get('/', async (req, res) => {
