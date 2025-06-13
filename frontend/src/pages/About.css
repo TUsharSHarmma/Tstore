@@ -1,0 +1,128 @@
+.about-page {
+  max-width: 960px;
+  margin: auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+.about-header {
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+.about-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #1e88e5;
+}
+
+.about-header p {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.about-section {
+  margin-bottom: 2.5rem;
+}
+
+.about-section h2 {
+  color: #1e88e5;
+  margin-bottom: 1rem;
+  border-left: 4px solid #1e88e5;
+  padding-left: 1rem;
+}
+
+.about-section p,
+.about-section ul {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.about-section ul {
+  padding-left: 1.5rem;
+}
+
+.team-section .team-card {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.team-card img {
+  width: 100px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  border: 3px solid #1e88e5;
+}
+
+.team-card h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  color: #222;
+}
+
+.team-card p {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+.site-footer {
+  background-color: #222;
+  color: #ddd;
+  padding: 2rem 1rem 1rem;
+  font-size: 14px;
+  margin-top: 3rem;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-container div {
+  flex: 1 1 200px;
+}
+
+.footer-about h3 {
+  color: #fff;
+}
+
+.footer-contact a,
+.footer-social a,
+.footer-links a {
+  color: #65d6ff;
+  text-decoration: none;
+}
+
+.footer-social .social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin: 0.4rem 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+  font-size: 12px;
+  color: #aaa;
+}

@@ -1,0 +1,202 @@
+/* AuthForm.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+.auth-page {  /* wrap your auth form in this class */
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ffafbd, #ffc3a0, #89f7fe, #66a6ff);
+  background-size: 400% 400%;
+  animation: gradientBG 3s ease infinite;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+}
+
+.auth-page * {
+  box-sizing: inherit;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Then rest of your form styles, but all nested inside .auth-page */
+
+.auth-container {
+  background: white;
+  width: 380px;
+  padding: 40px 30px 50px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  text-align: center;
+  position: relative;
+  margin-top: 5rem;
+}
+
+
+.auth-title {
+  margin-bottom: 25px;
+  font-weight: 100;
+  font-size: 1.3rem;
+  color: #4e4c4c;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 15px 15px 15px 15px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background: transparent;
+}
+
+.input-group input:focus {
+  border-color: #ff6ec4;
+  box-shadow: 0 0 8px #ff6ec4;
+}
+
+.input-group label {
+  position: absolute;
+  top: 50%;
+  left: 18px;
+  color: #aaa;
+  transform: translateY(-50%);
+  pointer-events: none;
+  transition: all 0.3s ease;
+  background: white;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+
+.input-group input:not(:placeholder-shown) + label,
+.input-group input:focus + label {
+  top: -10px;
+  left: 12px;
+  font-size: 0.8rem;
+  color: #ff6ec4;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: #ff6ec4;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 14px 0;
+  width: 100%;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(255, 110, 196, 0.4);
+  letter-spacing: 1.2px;
+}
+
+.btn-primary:hover {
+  background: #ff3fa4;
+  box-shadow: 0 0 20px #ff3fa4;
+  transform: scale(1.05);
+}
+
+.error-message {
+  color: #ff3a3a;
+  margin-bottom: 15px;
+  font-weight: 600;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% {transform: translateX(0);}
+  25% {transform: translateX(-6px);}
+  50% {transform: translateX(6px);}
+  75% {transform: translateX(-6px);}
+}
+
+.switch-auth {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.switch-auth a {
+  color: #ff6ec4;
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.3s ease;
+}
+
+.switch-auth a:hover {
+  color: #ff3fa4;
+}
+
+.pagess {
+  padding: 0rem;
+  font-family: 'Segoe UI', sans-serif;
+ 
+}
+.site-footer {
+  background-color: #222;
+  color: #ddd;
+  font-size: 14px;
+  margin-top: 0;
+  
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-container div {
+  flex: 1 1 200px;
+}
+
+.footer-about h3 {
+  color: #fff;
+}
+
+.footer-contact a,
+.footer-social a,
+.footer-links a {
+  color: #65d6ff;
+  text-decoration: none;
+}
+
+.footer-social .social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin: 0.4rem 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  border-top: 1px solid #444;
+  padding-top: 1rem;
+  font-size: 12px;
+  color: #aaa;
+}
