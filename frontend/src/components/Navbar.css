@@ -1,5 +1,5 @@
 .navbar {
-  height: 32px;
+  height: 42px;
   padding: 1rem 3rem;
   position: fixed;
   top: 0;
@@ -32,7 +32,7 @@
   display: flex;
   align-items: center;
   text-decoration: none;
-  margin-left: 56rem;
+  margin-left: 60rem;
 }
 .navbar-links a {
   margin: 0.9rem;
