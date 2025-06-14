@@ -18,7 +18,7 @@ export default function Upload() {
     formData.append('apk', apk);       // apk file
 
     try {
-      const res = await axios.post('https://tstore-dkcf.onrender.com/api/apps/upload', formData);
+      const res = axios.post(`${process.env.REACT_APP_API_URL}/api/apps/upload`, formData)
       setMessage(res.data.message);
       setTitle('');
       setDescription('');
