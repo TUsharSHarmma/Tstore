@@ -7,7 +7,7 @@ export default function AppPage() {
   const [apps, setApps] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/apps')
+    axios.get('https://tstore-dkcf.onrender.com/api/apps')
       .then(res => setApps(res.data))
       .catch(err => console.error("Error fetching apps:", err));
   }, []);
