@@ -54,7 +54,6 @@ router.get('/', async (req, res) => {
 });
 
 // ✅ NEW: GET /api/apps/download/:filename
-const fs = require('fs');
 
 // ... your existing routes
 
