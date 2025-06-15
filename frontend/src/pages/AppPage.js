@@ -1,3 +1,4 @@
+// AppPage.js
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './AppPage.css';
@@ -44,7 +45,7 @@ export default function AppPage() {
               />
               <div className="app-details">
                 <h3>{app.title}</h3>
-                <p>{app.description || 'Lorem ipsum dolor s, consectetur el. Nul et eui null.'}</p>
+                <p>{app.description || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et euismod nulla.'}</p>
                 <a href={app.apkUrl} download className="download-button">⬇ Download APK</a>
               </div>
             </div>
