@@ -6,26 +6,18 @@ require('dotenv').config();
 
 const app = express();
 
-// ✅ Trust proxy for Render (if using HTTPS & CORS)
-app.set('trust proxy', 1);
-
-// ✅ Proper CORS setup
+// ✅ Proper CORS setup for frontend-backend communication
 const corsOptions = {
-  origin: [
-    'https://tusharstore.xyz',
-    'https://www.tusharstore.xyz',
-    'https://tusharstore.vercel.app'
-  ],
+  origin: ["https://tusharstore.xyz", "https://www.tusharstore.xyz", "https://tusharstore.vercel.app"], // 👈 your frontend domain on Render
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // only if cookies or auth headers are used
+  credentials: true, // only if you're using cookies or auth headers
 };
 app.use(cors(corsOptions));
 
-// ✅ Middleware
-app.use(express.json()); // parse application/json
-app.use(express.urlencoded({ extended: true })); // parse application/x-www-form-urlencoded
+// Middleware
+app.use(express.json());
 
-// ✅ Serve static uploads if needed (optional for Cloudinary)
+// Serve static files (APK files)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ MongoDB Connection
@@ -36,18 +28,13 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ MongoDB connected'))
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// ✅ Routes
-app.use('/api/auth', require('./routes/auth'));       
-app.use('/api/apps', require('./routes/appRoutes'));  
+// Routes
+app.use('/api/auth', require('./routes/auth'));       // Auth routes (login/signup)
+app.use('/api/apps', require('./routes/appRoutes'));  // App upload/download routes
 app.use('/api/contact', require('./routes/contactRoutes'));
 
-// ✅ Default health check route
-app.get('/', (req, res) => {
-  res.send('✅ Backend running...');
-});
-
-// ✅ Start server
+// Server Port
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🚀 Server running at http://localhost:${PORT}`);
 });

@@ -1,92 +1,49 @@
 const express = require('express');
+const router = express.Router();
 const multer = require('multer');
-const { v2: cloudinary } = require('cloudinary');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const path = require('path');
 const App = require('../models/App');
 
-const router = express.Router();
-
-// ✅ Cloudinary Config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-// ✅ Storage for banner
-const bannerStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'tstore_banners',
-    resource_type: 'image',
-    allowed_formats: ['jpg', 'png']
+// Set up multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
   }
 });
 
-// ✅ Multer setup
-const upload = multer({
-  storage: multer.memoryStorage(), // APK in memory
-  limits: { fileSize: 100 * 1024 * 1024 } // 100MB limit
-}).fields([
-  { name: 'banner', maxCount: 1 },
-  { name: 'apk', maxCount: 1 }
-]);
+const upload = multer({ storage: storage });
 
-// ✅ Upload route
-router.post('/upload', (req, res) => {
-  upload(req, res, async (err) => {
-    if (err) {
-      console.error('Multer error:', err);
-      return res.status(500).json({ message: 'Upload failed. Please check the file size or try again.' });
-    }
-
+// POST /api/apps/upload
+router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), async (req, res) => {
+  try {
     const { title, description } = req.body;
-    const bannerFile = req.files?.banner?.[0];
-    const apkFile = req.files?.apk?.[0];
+    const apkFile = req.files['apk']?.[0];
+    const bannerFile = req.files['banner']?.[0];
 
-    if (!title || !description || !bannerFile || !apkFile) {
-      return res.status(400).json({ message: 'All fields are required' });
+    if (!title || !description || !apkFile || !bannerFile) {
+      return res.status(400).json({ message: 'Title, description, APK, and banner are required' });
     }
 
-    try {
-      // ✅ Upload banner to Cloudinary
-      const bannerUpload = await cloudinary.uploader.upload_stream(
-        { folder: 'tstore_banners', resource_type: 'image' },
-        (error, result) => {
-          if (error) throw error;
-          return result;
-        }
-      );
+    const baseUrl = `${req.protocol}://${req.get('host')}`;
+    const apkUrl = `${baseUrl}/uploads/${apkFile.filename}`;
+    const bannerUrl = `${baseUrl}/uploads/${bannerFile.filename}`;
 
-      // ✅ Upload APK to Cloudinary
-      const apkUpload = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          { folder: 'tstore_apks', resource_type: 'raw' },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        ).end(apkFile.buffer);
-      });
+    const newApp = new App({ title, description, apkUrl, bannerUrl });
+    await newApp.save();
 
-      const newApp = new App({
-        title,
-        description,
-        bannerUrl: bannerFile.path, // Already uploaded by Cloudinary
-        apkUrl: apkUpload.secure_url
-      });
-
-      await newApp.save();
-      res.json({ message: 'App uploaded successfully!', app: newApp });
-
-    } catch (error) {
-      console.error('Upload failed:', error);
-      res.status(500).json({ message: 'Upload failed. Please try again.' });
-    }
-  });
+    res.json({ message: 'App uploaded successfully!', app: newApp });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error while uploading app' });
+  }
 });
 
-// ✅ Get all apps
+
+// GET /api/apps
 router.get('/', async (req, res) => {
   try {
     const apps = await App.find().sort({ uploadedAt: -1 });

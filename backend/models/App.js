@@ -1,28 +1,13 @@
 const mongoose = require('mongoose');
 
 const appSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
-    maxlength: 100
-  },
-  description: {
-    type: String,
-    required: true,
-    maxlength: 1000
-  },
-  apkUrl: {
-    type: String,
-    required: true
-  },
-  bannerUrl: {
-    type: String,
-    required: true
-  },
+  title: String,
+  description: String,
+  apkUrl: String,
+  bannerUrl: String,
   uploadedAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   }
 });
 
