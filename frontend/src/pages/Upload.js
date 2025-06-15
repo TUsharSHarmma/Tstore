@@ -14,11 +14,19 @@ export default function Upload() {
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('banner', banner); // image file
-    formData.append('apk', apk);       // apk file
+    formData.append('banner', banner);
+    formData.append('apk', apk);
 
     try {
-      const res = await axios.post('https://tstore-dkcf.onrender.com/api/apps/upload', formData);
+      const res = await axios.post(
+        'https://tstore-dkcf.onrender.com/api/apps/upload',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          withCredentials: true
+        }
+      );
+
       setMessage(res.data.message);
       setTitle('');
       setDescription('');
@@ -39,27 +47,27 @@ export default function Upload() {
           type="text"
           placeholder="App Title"
           value={title}
-          onChange={e => setTitle(e.target.value)}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
         <textarea
           placeholder="App Description"
           value={description}
-          onChange={e => setDescription(e.target.value)}
+          onChange={(e) => setDescription(e.target.value)}
           required
         />
         <label className="upload-label">Choose Banner Image (JPG/PNG)</label>
         <input
           type="file"
           accept="image/png, image/jpeg"
-          onChange={e => setBanner(e.target.files[0])}
+          onChange={(e) => setBanner(e.target.files[0])}
           required
         />
         <label className="upload-label">Choose APK File</label>
         <input
           type="file"
           accept=".apk"
-          onChange={e => setApk(e.target.files[0])}
+          onChange={(e) => setApk(e.target.files[0])}
           required
         />
         <button type="submit">Upload App</button>

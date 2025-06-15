@@ -1,85 +1,66 @@
 const express = require('express');
 const multer = require('multer');
 const { v2: cloudinary } = require('cloudinary');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const App = require('../models/App');
 
 const router = express.Router();
 
-// 1. Cloudinary Config
+// Cloudinary Configuration
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// 2. Cloudinary Storage for Banner
-const bannerStorage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'tstore_banners',
-    allowed_formats: ['jpg', 'png'],
-    resource_type: 'image'
-  }
-});
+// Multer Memory Storage (used for both files)
+const upload = multer({ storage: multer.memoryStorage() });
 
-// 3. Multer Memory Storage for APK (upload to Cloudinary manually)
-const apkStorage = multer.memoryStorage();
-
-// 4. Set up Multer Fields
-const upload = multer({
-  storage: (req, file, cb) => {
-    if (file.fieldname === 'banner') cb(null, bannerStorage);
-    else cb(null, apkStorage);
-  }
-}).fields([
+// Upload Route
+router.post('/upload', upload.fields([
   { name: 'banner', maxCount: 1 },
   { name: 'apk', maxCount: 1 }
-]);
+]), async (req, res) => {
+  const { title, description } = req.body;
+  const bannerFile = req.files?.banner?.[0];
+  const apkFile = req.files?.apk?.[0];
 
-// 5. POST /api/apps/upload
-router.post('/upload', (req, res) => {
-  upload(req, res, async function (err) {
-    if (err) {
-      console.error('Upload error:', err);
-      return res.status(500).json({ message: 'File upload error' });
-    }
+  if (!title || !description || !bannerFile || !apkFile) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-    const { title, description } = req.body;
-    const bannerFile = req.files?.banner?.[0];
-    const apkFile = req.files?.apk?.[0];
+  try {
+    // Upload banner to Cloudinary (image)
+    const bannerUpload = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: 'tstore_banners', resource_type: 'image' },
+        (err, result) => err ? reject(err) : resolve(result)
+      ).end(bannerFile.buffer);
+    });
 
-    if (!title || !description || !bannerFile || !apkFile) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
+    // Upload APK to Cloudinary (raw)
+    const apkUpload = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: 'tstore_apks', resource_type: 'raw' },
+        (err, result) => err ? reject(err) : resolve(result)
+      ).end(apkFile.buffer);
+    });
 
-    try {
-      // Upload APK file buffer to Cloudinary
-      const apkUploadRes = await new Promise((resolve, reject) => {
-        cloudinary.uploader.upload_stream(
-          { folder: 'tstore_apks', resource_type: 'raw' },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        ).end(apkFile.buffer);
-      });
+    const newApp = new App({
+      title,
+      description,
+      bannerUrl: bannerUpload.secure_url,
+      apkUrl: apkUpload.secure_url,
+    });
 
-      const apkUrl = apkUploadRes.secure_url;
-      const bannerUrl = bannerFile.path;
-
-      const newApp = new App({ title, description, bannerUrl, apkUrl });
-      await newApp.save();
-
-      res.json({ message: 'App uploaded successfully!', app: newApp });
-    } catch (error) {
-      console.error('Final upload error:', error);
-      res.status(500).json({ message: 'Failed to upload to Cloudinary' });
-    }
-  });
+    await newApp.save();
+    res.json({ message: 'App uploaded successfully!', app: newApp });
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    res.status(500).json({ message: 'Failed to upload to Cloudinary' });
+  }
 });
 
-// 6. GET /api/apps
+// Fetch all apps
 router.get('/', async (req, res) => {
   try {
     const apps = await App.find().sort({ uploadedAt: -1 });
