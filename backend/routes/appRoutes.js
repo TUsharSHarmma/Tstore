@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
 const App = require('../models/App');
 
 // Set up multer storage
@@ -43,6 +42,7 @@ router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), asy
   }
 });
 
+
 // GET /api/apps
 router.get('/', async (req, res) => {
   try {
@@ -52,32 +52,5 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch apps' });
   }
 });
-
-// ✅ NEW: GET /api/apps/download/:filename
-
-// ... your existing routes
-
-// ✅ Add this at the end of appRoutes.js
-router.get('/download/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const filePath = path.join(__dirname, '../uploads', filename);
-
-  // Check if file exists
-  fs.access(filePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      console.error('❌ File not found:', filePath);
-      return res.status(404).json({ message: 'File not found' });
-    }
-
-    // If found, download it
-    res.download(filePath, filename, (err) => {
-      if (err) {
-        console.error('❌ Error sending file:', err);
-        res.status(500).json({ message: 'Error downloading file' });
-      }
-    });
-  });
-});
-
 
 module.exports = router;
