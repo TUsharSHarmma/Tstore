@@ -6,16 +6,50 @@ export default function Upload() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [banner, setBanner] = useState(null);
-  const [apk, setApk] = useState(null);
+  const [apkUrl, setApkUrl] = useState('');
   const [message, setMessage] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleUpload = async (e) => {
+  // Upload APK file to UploadThing
+  const handleApkUpload = async (file) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/uploadthing/apk", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data?.url) {
+        setApkUrl(data.url);
+        setMessage("✅ APK uploaded successfully!");
+      } else {
+        setMessage("❌ APK upload failed.");
+      }
+    } catch (err) {
+      console.error("Upload error:", err);
+      setMessage("❌ Error uploading APK.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!apkUrl) {
+      setMessage("❌ Please upload APK file first.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('banner', banner); // image file
-    formData.append('apk', apk);       // apk file
+    formData.append('banner', banner);
+    formData.append('apkUrl', apkUrl); // URL only
 
     try {
       const res = await axios.post('https://tstore-dkcf.onrender.com/api/apps/upload', formData);
@@ -23,10 +57,10 @@ export default function Upload() {
       setTitle('');
       setDescription('');
       setBanner(null);
-      setApk(null);
+      setApkUrl('');
     } catch (err) {
       console.error(err);
-      setMessage('Upload failed. Please try again.');
+      setMessage("❌ Upload failed. Try again.");
     }
   };
 
@@ -34,35 +68,20 @@ export default function Upload() {
     <div className="upload-container">
       <h2>📤 Upload New App</h2>
       {message && <p className="upload-message">{message}</p>}
-      <form onSubmit={handleUpload} className="upload-form" encType="multipart/form-data">
-        <input
-          type="text"
-          placeholder="App Title"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="App Description"
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          required
-        />
-        <label className="upload-label">Choose Banner Image (JPG/PNG)</label>
-        <input
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={e => setBanner(e.target.files[0])}
-          required
-        />
-        <label className="upload-label">Choose APK File</label>
-        <input
-          type="file"
-          accept=".apk"
-          onChange={e => setApk(e.target.files[0])}
-          required
-        />
-        <button type="submit">Upload App</button>
+      <form onSubmit={handleSubmit} className="upload-form" encType="multipart/form-data">
+        <input type="text" placeholder="App Title" value={title} onChange={e => setTitle(e.target.value)} required />
+        <textarea placeholder="App Description" value={description} onChange={e => setDescription(e.target.value)} required />
+
+        <label>Banner Image (JPG/PNG)</label>
+        <input type="file" accept="image/png, image/jpeg" onChange={e => setBanner(e.target.files[0])} required />
+
+        <label>APK File (via UploadThing)</label>
+        <input type="file" accept=".apk" onChange={e => handleApkUpload(e.target.files[0])} required />
+        {isUploading && <p>Uploading APK...</p>}
+
+        <button type="submit" disabled={isUploading || !apkUrl}>
+          Upload App
+        </button>
       </form>
     </div>
   );
