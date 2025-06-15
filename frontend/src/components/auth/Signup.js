@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import './AuthForm.css';
+import Swal from 'sweetalert2';
+import './AuthForm.css'; // custom spinner style
 
 const Signup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', email: '', password: '' });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError('');
   };
 
   const isFormValid = () => {
@@ -20,15 +19,19 @@ const Signup = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError('');
 
     if (!isFormValid()) {
-      setError('All fields are required and password must be at least 6 characters.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Input',
+        text: 'All fields are required and password must be at least 6 characters.',
+      });
       return;
     }
 
+    setLoading(true);
+
     try {
-      setLoading(true);
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -40,30 +43,47 @@ const Signup = () => {
       });
 
       const data = await res.json();
-      console.log("Signup response:", data);
+      setLoading(false);
 
       if (res.ok) {
-        alert('Signup successful! Please login.');
-        navigate('/login');
+        Swal.fire({
+          icon: 'success',
+          title: 'Signup Successful!',
+          text: 'Please login to continue.',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        setTimeout(() => navigate('/login'), 2000);
       } else {
-        setError(data.message || 'Signup failed');
+        Swal.fire({
+          icon: 'error',
+          title: 'Signup Failed',
+          text: data.message || 'Please try again.',
+        });
       }
     } catch (err) {
-      console.error("Signup Error:", err);
-      setError('Network error. Backend may be down.');
-    } finally {
       setLoading(false);
+      Swal.fire({
+        icon: 'error',
+        title: 'Network Error',
+        text: 'Unable to connect to the server.',
+      });
     }
   };
 
   return (
     <div className='pagess'>
+      {loading && (
+        <div className="loading-overlay">
+          <div className="custom-spinner"></div>
+          <p className="loading-text">Creating account...</p>
+        </div>
+      )}
+
       <div className="auth-page">
         <div className="auth-container">
           <form onSubmit={handleSubmit} noValidate>
             <h2 className="auth-title">Create Your Account</h2>
-
-            {error && <p className="error-message">{error}</p>}
 
             <div className="input-group">
               <input
@@ -105,9 +125,7 @@ const Signup = () => {
               <label htmlFor="signup-password">Password</label>
             </div>
 
-            <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Signing up...' : 'Sign Up'}
-            </button>
+            <button type="submit" className="btn-primary" disabled={loading}>Sign Up</button>
 
             <p className="switch-auth">
               Already have an account?
