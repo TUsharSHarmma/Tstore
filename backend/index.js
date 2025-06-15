@@ -2,22 +2,33 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 
-// ✅ Proper CORS setup for frontend-backend communication
+// Ensure 'uploads/' folder exists
+const uploadPath = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath);
+}
+
+// CORS for frontend-backend communication
 const corsOptions = {
-  origin: ["https://tusharstore.xyz", "https://www.tusharstore.xyz", "https://tusharstore.vercel.app"], // 👈 your frontend domain on Render
+  origin: [
+    "https://tusharstore.xyz",
+    "https://www.tusharstore.xyz",
+    "https://tusharstore.vercel.app"
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true, // only if you're using cookies or auth headers
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());
 
-// Serve static files (APK files)
+// ✅ Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ MongoDB Connection
@@ -29,11 +40,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));       // Auth routes (login/signup)
-app.use('/api/apps', require('./routes/appRoutes'));  // App upload/download routes
-app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/auth', require('./routes/auth'));       // Auth routes
+app.use('/api/apps', require('./routes/appRoutes'));  // Upload + download
+app.use('/api/contact', require('./routes/contactRoutes')); // Contact form
 
-// Server Port
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
