@@ -7,6 +7,15 @@ require('dotenv').config();
 
 const app = express();
 
+
+app.use((req, res, next) => {
+  if (req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect('https://' + req.headers.host + req.url);
+  }
+  next();
+});
+
+
 // Ensure 'uploads/' folder exists
 const uploadPath = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadPath)) {
