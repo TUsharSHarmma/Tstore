@@ -8,7 +8,7 @@ const app = express();
 
 // ✅ Proper CORS setup for frontend-backend communication
 const corsOptions = {
-  origin: 'https://tstore-1.onrender.com', // 👈 your frontend domain on Render
+  origin: ["https://tusharstore.xyz", "https://www.tusharstore.xyz"], // 👈 your frontend domain on Render
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true, // only if you're using cookies or auth headers
 };
