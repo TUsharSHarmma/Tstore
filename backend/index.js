@@ -7,13 +7,13 @@ require('dotenv').config();
 
 const app = express();
 
-// Ensure /uploads folder exists
+// Ensure 'uploads/' folder exists
 const uploadPath = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath);
 }
 
-// CORS config for frontend
+// CORS for frontend-backend communication
 const corsOptions = {
   origin: [
     "https://tusharstore.xyz",
@@ -28,10 +28,10 @@ app.use(cors(corsOptions));
 // Middleware
 app.use(express.json());
 
-// Serve APKs and banners
-app.use('/uploads', express.static(uploadPath));
+// ✅ Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB connection
+// ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -40,10 +40,11 @@ mongoose.connect(process.env.MONGO_URI, {
 .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/apps', require('./routes/appRoutes'));
-app.use('/api/contact', require('./routes/contactRoutes'));
+app.use('/api/auth', require('./routes/auth'));       // Auth routes
+app.use('/api/apps', require('./routes/appRoutes'));  // Upload + download
+app.use('/api/contact', require('./routes/contactRoutes')); // Contact form
 
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);

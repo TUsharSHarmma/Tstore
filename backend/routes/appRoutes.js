@@ -5,17 +5,20 @@ const path = require('path');
 const fs = require('fs');
 const App = require('../models/App');
 
-// Multer storage config
+// Set up multer storage
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => {
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
     cb(null, uniqueSuffix + '-' + file.originalname);
   }
 });
-const upload = multer({ storage });
 
-// Upload route
+const upload = multer({ storage: storage });
+
+// POST /api/apps/upload
 router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), async (req, res) => {
   try {
     const { title, description } = req.body;
@@ -40,7 +43,7 @@ router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), asy
   }
 });
 
-// Fetch all apps
+// GET /api/apps
 router.get('/', async (req, res) => {
   try {
     const apps = await App.find().sort({ uploadedAt: -1 });
@@ -49,5 +52,32 @@ router.get('/', async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch apps' });
   }
 });
+
+// ✅ NEW: GET /api/apps/download/:filename
+
+// ... your existing routes
+
+// ✅ Add this at the end of appRoutes.js
+router.get('/download/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, '../uploads', filename);
+
+  // Check if file exists
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('❌ File not found:', filePath);
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    // If found, download it
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.error('❌ Error sending file:', err);
+        res.status(500).json({ message: 'Error downloading file' });
+      }
+    });
+  });
+});
+
 
 module.exports = router;
