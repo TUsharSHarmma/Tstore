@@ -11,9 +11,9 @@
   "dependencies": {
     "cloudinary": "^2.6.1",
     "concurrently": "^9.1.2",
+    "dotenv": "^16.5.0",
     "multer": "^2.0.1",
-    "streamifier": "^0.1.1",
-    "uploadthing": "^7.7.2"
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
