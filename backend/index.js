@@ -18,7 +18,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Serve static files (APK files)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads')); // serve APKs
 
 // ✅ MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
