@@ -1,21 +1,34 @@
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
-const path = require('path');
+const { v2: cloudinary } = require('cloudinary');
+const streamifier = require('streamifier');
 const App = require('../models/App');
+const router = express.Router();
 
-// Set up multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  }
+// Cloudinary Config
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const upload = multer({ storage: storage });
+// Multer (in-memory)
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Helper: Upload Buffer to Cloudinary
+function uploadBufferToCloudinary(buffer, folder, resource_type) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, resource_type },
+      (err, result) => {
+        if (result) resolve(result.secure_url);
+        else reject(err);
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+}
 
 // POST /api/apps/upload
 router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), async (req, res) => {
@@ -28,20 +41,18 @@ router.post('/upload', upload.fields([{ name: 'apk' }, { name: 'banner' }]), asy
       return res.status(400).json({ message: 'Title, description, APK, and banner are required' });
     }
 
-    const baseUrl = `${req.protocol}://${req.get('host')}`;
-    const apkUrl = `${baseUrl}/uploads/${apkFile.filename}`;
-    const bannerUrl = `${baseUrl}/uploads/${bannerFile.filename}`;
+    const bannerUrl = await uploadBufferToCloudinary(bannerFile.buffer, 'tstore/banners', 'image');
+    const apkUrl = await uploadBufferToCloudinary(apkFile.buffer, 'tstore/apks', 'raw');
 
-    const newApp = new App({ title, description, apkUrl, bannerUrl });
+    const newApp = new App({ title, description, bannerUrl, apkUrl });
     await newApp.save();
 
     res.json({ message: 'App uploaded successfully!', app: newApp });
   } catch (err) {
-    console.error(err);
+    console.error('Upload error:', err);
     res.status(500).json({ message: 'Server error while uploading app' });
   }
 });
-
 
 // GET /api/apps
 router.get('/', async (req, res) => {
