@@ -54,20 +54,31 @@ router.get('/', async (req, res) => {
 });
 
 // ✅ NEW: GET /api/apps/download/:filename
+const fs = require('fs');
+
+// ... your existing routes
+
+// ✅ Add this at the end of appRoutes.js
 router.get('/download/:filename', (req, res) => {
   const filename = req.params.filename;
-  const filePath = path.join(__dirname, '..', 'uploads', filename);
+  const filePath = path.join(__dirname, '../uploads', filename);
 
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ message: 'File not found' });
-  }
-
-  res.download(filePath, filename, err => {
+  // Check if file exists
+  fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
-      console.error("Download error:", err);
-      res.status(500).json({ message: 'Failed to download file' });
+      console.error('❌ File not found:', filePath);
+      return res.status(404).json({ message: 'File not found' });
     }
+
+    // If found, download it
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.error('❌ Error sending file:', err);
+        res.status(500).json({ message: 'Error downloading file' });
+      }
+    });
   });
 });
+
 
 module.exports = router;
