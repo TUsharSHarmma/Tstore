@@ -18,15 +18,11 @@ export default function Upload() {
     formData.append('apk', apk);
 
     try {
-      const res = await axios.post(
-        'https://tstore-dkcf.onrender.com/api/apps/upload',
-        formData,
-        {
-          headers: { 'Content-Type': 'multipart/form-data' },
-          withCredentials: true
+      const res = await axios.post('https://tstore-dkcf.onrender.com/api/apps/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
-      );
-
+      });
       setMessage(res.data.message);
       setTitle('');
       setDescription('');
@@ -34,7 +30,7 @@ export default function Upload() {
       setApk(null);
     } catch (err) {
       console.error(err);
-      setMessage('Upload failed. Please try again.');
+      setMessage('❌ Upload failed. Please check the file size or try again.');
     }
   };
 
@@ -43,33 +39,12 @@ export default function Upload() {
       <h2>📤 Upload New App</h2>
       {message && <p className="upload-message">{message}</p>}
       <form onSubmit={handleUpload} className="upload-form" encType="multipart/form-data">
-        <input
-          type="text"
-          placeholder="App Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="App Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-        <label className="upload-label">Choose Banner Image (JPG/PNG)</label>
-        <input
-          type="file"
-          accept="image/png, image/jpeg"
-          onChange={(e) => setBanner(e.target.files[0])}
-          required
-        />
-        <label className="upload-label">Choose APK File</label>
-        <input
-          type="file"
-          accept=".apk"
-          onChange={(e) => setApk(e.target.files[0])}
-          required
-        />
+        <input type="text" placeholder="App Title" value={title} onChange={e => setTitle(e.target.value)} required />
+        <textarea placeholder="App Description" value={description} onChange={e => setDescription(e.target.value)} required />
+        <label>Choose Banner Image (JPG/PNG)</label>
+        <input type="file" accept="image/png, image/jpeg" onChange={e => setBanner(e.target.files[0])} required />
+        <label>Choose APK File</label>
+        <input type="file" accept=".apk" onChange={e => setApk(e.target.files[0])} required />
         <button type="submit">Upload App</button>
       </form>
     </div>
