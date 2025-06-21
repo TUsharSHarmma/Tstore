@@ -5,6 +5,7 @@
   color: #333;
 }
 
+
 .hero-section {
   background: linear-gradient(120deg, #007bff, #00c6ff, #65d6ff);
   color: white;
@@ -63,17 +64,18 @@
 }
 
 .app-list {
-  padding: 20px 20px;
+  padding: 20px;
   text-align: center;
-  margin: auto;
+  margin: 7rem auto 0 auto; /* Top margin & center horizontally */
+  width: 1000px; /* Same as hero-section */
+  max-width: 95%; /* Fallback for smaller screens */
 }
 
 .app-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 5px;
+  gap: 15px;
   margin-top: 30px;
-  margin: auto;
 }
 
 .app-card {
