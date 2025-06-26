@@ -1,7 +1,10 @@
-/* AuthForm.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
 
-.auth-page {  /* wrap your auth form in this class */
+* {
+  box-sizing: border-box;
+}
+
+.auth-page {
   height: 90vh;
   display: flex;
   justify-content: center;
@@ -10,11 +13,7 @@
   background-size: 400% 400%;
   animation: gradientBG 3s ease infinite;
   font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
-}
-
-.auth-page * {
-  box-sizing: inherit;
+  padding: 1rem;
 }
 
 @keyframes gradientBG {
@@ -23,24 +22,21 @@
   100% { background-position: 0% 50%; }
 }
 
-/* Then rest of your form styles, but all nested inside .auth-page */
-
 .auth-container {
-  background: white;
-  width: 380px;
-  padding: 40px 30px 50px;
+  background: #fff;
+  width: 100%;
+  max-width: 380px;
+  padding: 2.5rem 1.8rem;
   border-radius: 20px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
   text-align: center;
-  position: relative;
-  margin-top: 5rem;
+  margin-top: 3rem;
 }
-
 
 .auth-title {
   margin-bottom: 25px;
-  font-weight: 100;
-  font-size: 1.3rem;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   color: #4e4c4c;
 }
 
@@ -51,31 +47,31 @@
 
 .input-group input {
   width: 100%;
-  padding: 15px 15px 15px 15px;
+  padding: 14px 15px;
   font-size: 1rem;
   border-radius: 10px;
   border: 2px solid #ddd;
-  outline: none;
-  transition: border-color 0.3s ease;
   background: transparent;
+  transition: border-color 0.3s ease;
 }
 
 .input-group input:focus {
   border-color: #ff6ec4;
   box-shadow: 0 0 8px #ff6ec4;
+  outline: none;
 }
 
 .input-group label {
   position: absolute;
   top: 50%;
   left: 18px;
-  color: #aaa;
   transform: translateY(-50%);
-  pointer-events: none;
-  transition: all 0.3s ease;
   background: white;
   padding: 0 5px;
   border-radius: 5px;
+  color: #aaa;
+  transition: all 0.3s ease;
+  pointer-events: none;
 }
 
 .input-group input:not(:placeholder-shown) + label,
@@ -91,8 +87,8 @@
   background: #ff6ec4;
   color: white;
   font-weight: 600;
-  font-size: 1.1rem;
-  padding: 14px 0;
+  font-size: 1rem;
+  padding: 12px 0;
   width: 100%;
   border-radius: 12px;
   border: none;
@@ -140,30 +136,27 @@
   color: #ff3fa4;
 }
 
-.pagess {
-  padding: 0rem;
-  font-family: 'Segoe UI', sans-serif;
- 
-}
+/* Responsive footer styles */
 .site-footer {
   background-color: #222;
   color: #ddd;
   font-size: 14px;
-  margin-top: 0;
   
+  padding: 2rem 1rem;
 }
 
 .footer-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 2rem;
+  justify-content: space-between;
+  gap: 1.5rem;
   max-width: 1200px;
   margin: auto;
 }
 
 .footer-container div {
   flex: 1 1 200px;
+  min-width: 150px;
 }
 
 .footer-about h3 {
@@ -201,6 +194,7 @@
   color: #aaa;
 }
 
+/* Loading Overlay */
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -237,3 +231,52 @@
   }
 }
 
+/* Mobile Optimization */
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 2rem 1.2rem;
+  }
+
+  .auth-title {
+    font-size: 1.1rem;
+  }
+
+  .btn-primary {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .input-group input {
+    padding: 12px;
+  }
+
+  .footer-container {
+    flex-direction: row !important; /* override column */
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: left;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .footer-container div {
+    flex: 1 1 40%; /* allow 2 items per row if needed */
+    min-width: 160px;
+  }
+
+  .footer-social .social-icons {
+    flex-direction: row;
+    justify-content: start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .footer-links li {
+    margin: 0.3rem 0;
+  }
+
+  .footer-bottom {
+    font-size: 11px;
+    margin-top: 2rem;
+  }
+}

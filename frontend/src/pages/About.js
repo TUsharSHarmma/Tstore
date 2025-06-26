@@ -12,7 +12,7 @@ const About = () => {
 
       <section className="about-section">
         <h2>What is T-Store?</h2>
-        <p>
+        <p> 
           T-Store is a dynamic web-based platform designed to simplify the way users discover, explore, and download Android applications.
           Whether you're a tech enthusiast or a casual user, T-Store offers a streamlined experience similar to Google Play Store — but
           with a modern, developer-friendly twist.

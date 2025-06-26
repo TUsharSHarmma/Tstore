@@ -125,6 +125,7 @@
 
   .menu-icon {
     display: block;
+    color: var(--accent);
   }
 
   .nav-links {

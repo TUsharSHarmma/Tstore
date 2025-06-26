@@ -45,6 +45,7 @@
   padding-left: 1.5rem;
 }
 
+/* Team Section */
 .team-section .team-card {
   display: flex;
   align-items: center;
@@ -52,6 +53,7 @@
   border-radius: 10px;
   padding: 1rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
 }
 
 .team-card img {
@@ -72,6 +74,8 @@
   font-size: 0.95rem;
   color: #666;
 }
+
+/* Footer */
 .site-footer {
   background-color: #222;
   color: #ddd;
@@ -126,4 +130,69 @@
   padding-top: 1rem;
   font-size: 12px;
   color: #aaa;
+}
+
+/* ------------------ Mobile Responsive ------------------ */
+@media (max-width: 768px) {
+  .about-page {
+    padding: 1.2rem 1rem;
+    margin-top: 5.5rem;
+  }
+
+  .about-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .about-header p {
+    font-size: 1rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.2rem;
+    padding-left: 0.8rem;
+  }
+
+  .about-section p,
+  .about-section ul {
+    font-size: 0.95rem;
+  }
+
+  .team-section .team-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.2rem;
+  }
+
+  .team-card img {
+    margin: 0 0 1rem 0;
+  }
+
+  .team-card h3 {
+    font-size: 1.1rem;
+  }
+
+  .team-card p {
+    font-size: 0.9rem;
+  }
+
+  .footer-container {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 1.2rem;
+    padding-bottom: 1rem;
+  }
+
+  .footer-container div {
+    min-width: 180px;
+  }
+
+  .footer-links ul {
+    text-align: left;
+  }
+
+  .footer-bottom {
+    font-size: 11px;
+    padding-top: 0.8rem;
+  }
 }
