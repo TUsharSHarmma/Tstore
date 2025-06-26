@@ -14,14 +14,14 @@ const Home = () => {
       navigate("/login");
     }
   };
-
+  
   return(
   <div className="home-container">
 
      <main>
      
         <div className="part">
-                <h2>Super Fast and Safe Downloading via T-STORE App</h2>
+                <h2>Super Fast and Safe DownloadinG via T-STORE App</h2>
                 <h6>One-click to install XAPK/APK files on Android!</h6>
                 <button onClick={handleGetStarted}>GET STARTED</button>
         </div>

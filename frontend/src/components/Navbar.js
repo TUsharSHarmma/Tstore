@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import './Navbar.css';
+import logo from '../assets/logo.png';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
-const Navbar = () => (
-  <nav className="navbar">
-    <div className="navbar-logo">
-      <img src="/logo.png" alt="Logo" />
-    </div>
+function Navbar() {
+  const [open, setOpen] = useState(false);
 
-    <div className="navbar-links">
-      <NavLink to="/" className="nav-link" activeclassname="active" end>Home</NavLink>
+  const toggleMenu = () => setOpen(!open);
+  const closeMenu = () => setOpen(false);
+
+  
+  return (
+    <nav className="navbar glass-navbar">
+      <img src={logo} alt="Logo" className="logo-img" />
+ 
+      <div className={`nav-links ${open ? 'open' : ''}`}>
+        <NavLink to="/" className="nav-link" activeclassname="active" end>Home</NavLink>
       <NavLink to="/about" className="nav-link" activeclassname="active">About</NavLink>
       
       <NavLink to="/contact" className="nav-link" activeclassname="active">Contact</NavLink>
-    </div>
+      </div>
 
-    <div className="navbar-buttons">
+
+      <div className="navbar-buttons">
       {/* Wrap buttons with Link to navigate */}
       <Link to="/login">
         <button className="btn-outline">Login</button>
@@ -24,8 +32,14 @@ const Navbar = () => (
         <button className="btn-primary">Signup</button>
       </Link>
     </div>
-  </nav>
-);
 
+
+
+      <div className="menu-icon" onClick={toggleMenu}>
+        {open ? <FaTimes /> : <FaBars />}
+      </div>
+    </nav>
+  );
+}
 
 export default Navbar;

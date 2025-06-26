@@ -1,3 +1,10 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
 .home-container {
   padding: 0rem;
   font-family: 'Segoe UI', sans-serif;
@@ -22,7 +29,7 @@ main {
 
 .part {
     width: 50%;
-    height: 45%;
+    height: 100%;
     padding: 5rem;
     align-content: center;
     justify-content: center;
@@ -43,7 +50,7 @@ main {
 .part h2 {
   
   color: rgb(34, 34, 43);
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 600;
   font-family: Georgia, 'Times New Roman', Times, serif;
   
@@ -95,7 +102,7 @@ main {
   position: relative;
   display: block;
   width: calc(100% + 1.3px);
-  height: 12rem;
+  height: 14rem;
 }
 
 .custom-shape-divider-bottom-1696038172 .shape-fill {
@@ -104,8 +111,10 @@ main {
 
 .features {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
   padding: 2rem;
+  gap: 2rem;
 }
 .feature-card {
   background: #f8f9fa;
@@ -196,15 +205,15 @@ main {
 .gradient-box {
   margin: 2rem auto;
   padding: 2rem;
-  width: 1100px;
-  height: 130px;
+  width: 100%;
+  max-width: 1100px;
   border-radius: 20px;
   text-align: center;
   color: white;
   background: linear-gradient(135deg, #ff7eb3, #65d6ff, #c084fc);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   background-size: 300% 300%;
   animation: gradientAnimation 8s ease infinite;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .gradient-box h2 {
@@ -278,3 +287,90 @@ main {
   color: #aaa;
 }
 
+@media (max-width: 768px) {
+
+  body {
+  overflow-x: hidden;
+}
+  main {
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 115vw;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .part {
+    width: 55%;
+    padding: 1rem;
+    margin-top: 3.5rem;
+    height: 55%;
+    
+  }
+
+  .partt {
+    width: 45%;
+    padding: 1rem;
+    height: 55%;
+    margin-top: 2.2rem;
+  }
+.part button {
+  background-color: #0ec94cc6;
+  color: rgb(4, 65, 25);
+  border: none;
+  font-size: 8px;
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-weight: 1000;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+
+
+.custom-shape-divider-bottom-1696038172 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 8rem;
+}
+
+
+
+  .part h2 {
+    font-size: 16px;
+  }
+
+  .homlog img {
+    width: 100%;
+    margin: 2rem auto;
+  }
+
+  .features {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-card {
+    width: 90%;
+  }
+
+  .gradient-box {
+    width: 95%;
+    padding: 1.5rem;
+  }
+
+  .app-card-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .app-card {
+    width: 90%;
+  }
+
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+}
