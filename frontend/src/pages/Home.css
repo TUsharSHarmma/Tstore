@@ -34,17 +34,26 @@ main {
     align-content: center;
     justify-content: center;
 }
+
 .part button {
-  background-color: #12913c;
+  background-color: #0aac2d;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 999px;
   font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
 }
+
 .part button:hover {
-  background-color: #034b21;
+  background-color: #034718;
 }
+
+
+
+
+
 .part h2 {
   
   color: rgb(34, 34, 43);
@@ -73,18 +82,7 @@ main {
   font-family: Georgia, 'Times New Roman', Times, serif;
   
 }
-.buttom {
-  display: inline-block;
-  background-color: #28a745; /* Green */
-  color: #fff;
-  padding: 12px 32px;
-  border-radius: 999px; /* Fully rounded (pill style) */
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 600;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+
 
 .custom-shape-divider-bottom-1696038172 {
   position: absolute;
