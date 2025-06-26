@@ -191,16 +191,36 @@
   .hero-section p {
     font-size: 1rem;
   }
-
   .info-section {
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 10px;
-  }
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 0.3rem;
+  padding: 1rem;
+}
 
-  .card {
-    width: 90%;
-  }
+.card {
+  min-width: 32%;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: 32%;
+}
+
+.card h2 {
+    font-size: 8px;
+} 
+ .card p {
+  font-size: 6px;
+
+}
+
+
+
+
+
+
+
+
 
   .app-list {
     width: 100%;

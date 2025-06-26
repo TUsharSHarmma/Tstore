@@ -32,7 +32,7 @@ export default function AppPage() {
           <p>Users can download and share their APKs easily and securely with just a few clicks.</p>
         </div>
       </section>
-
+ 
       <section className="app-list">
         <h2>Download APKs</h2>
         <div className="app-grid">

@@ -297,7 +297,7 @@ main {
     flex-wrap: wrap;
     height: 115vw;
     padding: 1rem;
-    text-align: center;
+    
   }
 
   .part {
@@ -347,13 +347,27 @@ main {
   }
 
   .features {
-    flex-direction: column;
-    align-items: center;
-  }
+  flex-direction: row;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 0.3rem;
+  padding: 1rem;
+}
 
-  .feature-card {
-    width: 90%;
-  }
+.feature-card {
+  min-width: 32%;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: 32%;
+}
+
+.feature-card h2 {
+    font-size: 8px;
+} 
+ .feature-card p {
+  font-size: 6px;
+
+}
 
   .gradient-box {
     width: 95%;

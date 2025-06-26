@@ -17,7 +17,7 @@ const Home = () => {
   
   return(
   <div className="home-container">
-
+ 
      <main>
      
         <div className="part">
