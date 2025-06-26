@@ -35,14 +35,12 @@ main {
     justify-content: center;
 }
 .part button {
-  background-color: #11d753;
+  background-color: #12913c;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 999px;
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
 }
 .part button:hover {
   background-color: #034b21;
@@ -314,17 +312,6 @@ main {
     height: 55%;
     margin-top: 2.2rem;
   }
-.part button {
-  background-color: #0ec94cc6;
-  color: rgb(4, 65, 25);
-  border: none;
-  font-size: 8px;
-  padding: 8px 20px;
-  border-radius: 999px;
-  font-weight: 1000;
-  cursor: pointer;
-  transition: background 0.3s;
-}
 
 
 
