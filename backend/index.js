@@ -7,7 +7,30 @@ require('dotenv').config();
 
 const app = express();
 
-// Redirect HTTP to HTTPS (Render-specific)
+// ✅ CORS Middleware – must be FIRST before any redirect or route
+const corsOptions = {
+  origin: function (origin, callback) {
+    const whitelist = [
+      "https://tusharstore.xyz",
+      "https://www.tusharstore.xyz",
+      "https://tusharstore.vercel.app"
+    ];
+    if (!origin || whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
+app.use(cors(corsOptions));
+
+// ✅ Allow preflight for all routes
+app.options('*', cors(corsOptions));
+
+// ⛔ Place redirect AFTER CORS
 app.use((req, res, next) => {
   if (req.headers['x-forwarded-proto'] !== 'https') {
     return res.redirect('https://' + req.headers.host + req.url);
@@ -20,15 +43,6 @@ const uploadPath = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadPath)) fs.mkdirSync(uploadPath);
 
 // Middleware
-app.use(cors({
-  origin: [
-    "https://tusharstore.xyz",
-    "https://www.tusharstore.xyz",
-    "https://tusharstore.vercel.app"
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-}));
 app.use(express.json());
 app.use('/uploads', express.static(uploadPath));
 
@@ -45,5 +59,6 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/apps', require('./routes/appRoutes'));
 app.use('/api/contact', require('./routes/contactRoutes'));
 
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
