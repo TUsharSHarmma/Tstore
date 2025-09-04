@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const app = express();
 
-// ✅ CORS Middleware – must be FIRST before any redirect or route
+// ✅ CORS Middleware – must be FIRST before any route
 const corsOptions = {
   origin: function (origin, callback) {
     const whitelist = [
@@ -29,18 +29,6 @@ app.use(cors(corsOptions));
 
 // ✅ Allow preflight for all routes
 app.options('*', cors(corsOptions));
-
-// 🔹 Only redirect to HTTPS in production and for normal paths
-app.use((req, res, next) => {
-  if (
-    process.env.NODE_ENV === 'production' &&
-    req.headers['x-forwarded-proto'] !== 'https' &&
-    req.url.startsWith('/')
-  ) {
-    return res.redirect(`https://${req.headers.host}${req.url}`);
-  }
-  next();
-});
 
 // Ensure 'uploads/' exists
 const uploadPath = path.join(__dirname, 'uploads');
