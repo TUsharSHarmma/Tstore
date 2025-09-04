@@ -8,11 +8,13 @@ import AppPage from './pages/AppPage';
 import Upload from './pages/Upload';
 import Contact from './pages/Contact'
 import Login from './components/auth/Login';       // add Login component
-import Signup from './components/auth/Signup';     // add Signup component
+import Signup from './components/auth/Signup'; 
+import ScrollToTop from "./components/ScrollToTop";    // add Signup component
 
 function App() {
   return (
     <Router>
+    <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
