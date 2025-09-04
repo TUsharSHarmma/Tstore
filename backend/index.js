@@ -13,7 +13,9 @@ const corsOptions = {
     const whitelist = [
       "https://tusharstore.xyz",
       "https://www.tusharstore.xyz",
-      "https://tusharstore.vercel.app"
+      "https://tusharstore.vercel.app",
+      "https://tstore-kappa.vercel.app"
+
     ];
     if (!origin || whitelist.includes(origin)) {
       callback(null, true);
