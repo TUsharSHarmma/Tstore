@@ -31,7 +31,7 @@ const Contact = () => {
 
   setLoading(true);
   try {
-    const response = await fetch('https://t-store-fgjg.onrender.com/api/contact', {
+    const response = await fetch('https://tstore-r4mj.onrender.com/api/contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
