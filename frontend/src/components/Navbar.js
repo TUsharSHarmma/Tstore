@@ -10,31 +10,38 @@ function Navbar() {
   const toggleMenu = () => setOpen(!open);
   const closeMenu = () => setOpen(false);
 
-  
   return (
     <nav className="navbar glass-navbar">
+      {/* Logo */}
       <img src={logo} alt="Logo" className="logo-img" />
- 
+
+      {/* Navigation Links */}
       <div className={`nav-links ${open ? 'open' : ''}`}>
-        <NavLink to="/" className="nav-link" activeclassname="active" end>Home</NavLink>
-      <NavLink to="/about" className="nav-link" activeclassname="active">About</NavLink>
-      
-      <NavLink to="/contact" className="nav-link" activeclassname="active">Contact</NavLink>
+        <NavLink to="/" onClick={closeMenu} className="nav-link" end>
+          Home
+        </NavLink>
+
+        <NavLink to="/about" onClick={closeMenu} className="nav-link">
+          About
+        </NavLink>
+
+        <NavLink to="/contact" onClick={closeMenu} className="nav-link">
+          Contact
+        </NavLink>
       </div>
 
-
+      {/* Buttons */}
       <div className="navbar-buttons">
-      {/* Wrap buttons with Link to navigate */}
-      <Link to="/login">
-        <button className="btn-outline">Login</button>
-      </Link>
-      <Link to="/signup">
-        <button className="btn-primary">Signup</button>
-      </Link>
-    </div>
+        <Link to="/login" onClick={closeMenu}>
+          <button className="btn-outline">Login</button>
+        </Link>
 
+        <Link to="/signup" onClick={closeMenu}>
+          <button className="btn-primary">Signup</button>
+        </Link>
+      </div>
 
-
+      {/* Mobile Menu Icon */}
       <div className="menu-icon" onClick={toggleMenu}>
         {open ? <FaTimes /> : <FaBars />}
       </div>
